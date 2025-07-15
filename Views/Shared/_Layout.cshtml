@@ -21,6 +21,7 @@
     @await RenderSectionAsync("Scripts", required: false)
 </head>
 <body>
+  <div id="app"></div>
     <div class="wrap">
         <div class="background"></div>
         <div class="background-extend"></div>
@@ -145,7 +146,7 @@
         return '不客氣！有問題隨時找我喔！';
       } else {
         return '抱歉，我還在學習中，請稍後再試或聯絡真人客服。';
-      }
+      }onMouseMove
     }
 // 傳送使用者訊息並呼叫機器人回應
     function sendMessage() {
@@ -168,5 +169,81 @@
         sendMessage();
       }
     });
+
+    const TAIL_LENGTH = 10;  // 尾巴段數量，總共會有10個小圓點組成尾巴
+
+    const app = Vue.createApp({
+      data() {
+        return {
+          mouseX: 0, // 滑鼠X座標（相對於容器）
+          mouseY: 0, // 滑鼠Y座標（相對於容器）
+           // 初始化尾巴陣列，每個元素包含x,y座標，初始都設為(0,0)
+          tail: Array.from({ length: TAIL_LENGTH }, () => ({ x: 0, y: 0 })),
+          // 尾巴每段的顏色陣列，會依序循環使用
+          colors: ['#FF5E5B', '#FFAA5E', '#FFDA5E', '#8AFF5E', '#5EFFC8', '#5EDBFF', '#5E85FF', '#A25EFF', '#E65EFF', '#FF5EAE']
+        };
+      },
+      mounted() {
+          // 綁定全域滑鼠移動事件
+    window.addEventListener('mousemove', this.onMouseMove);
+        requestAnimationFrame(this.animateTail);
+      },
+      methods: {
+        onMouseMove(event) {
+          @* const rect = event.currentTarget.getBoundingClientRect();
+          this.mouseX = event.clientX - rect.left;
+          this.mouseY = event.clientY - rect.top; *@
+           // 直接使用全域滑鼠座標，不扣除容器位置
+      this.mouseX = event.clientX;
+      this.mouseY = event.clientY;
+        },
+        animateTail() {
+          // 從尾端開始跟著前一個位置移動
+          for (let i = this.tail.length - 1; i > 0; i--) {
+            // x座標向前一段x座標移動30%的距離
+            this.tail[i].x += (this.tail[i - 1].x - this.tail[i].x) * 0.3;
+            // y座標向前一段y座標移動30%的距離
+            this.tail[i].y += (this.tail[i - 1].y - this.tail[i].y) * 0.3;
+          }
+          // 頭部跟著滑鼠 ，移動30%的距離
+          this.tail[0].x += (this.mouseX - this.tail[0].x) * 0.3;
+          this.tail[0].y += (this.mouseY - this.tail[0].y) * 0.3;
+
+          requestAnimationFrame(this.animateTail);
+        }
+      },
+      template: `
+        <div  style="width: 100vw;  position: relative; overflow: hidden;">
+          <div
+            v-for="(segment, index) in tail"
+            :key="index"
+            class="tail"
+            :style="{
+              @* top: (segment.y - 8) + 'px',
+              left: (segment.x - 8) + 'px',
+              backgroundColor: colors[index % colors.length],
+              opacity: (1 - index / tail.length).toFixed(2) *@
+            
+            position: 'fixed', // 改成 fixed 讓尾巴跟著視窗座標走
+          top: (segment.y - 8) + 'px',
+          left: (segment.x - 8) + 'px',
+          backgroundColor: colors[index % colors.length],
+          opacity: (1 - index / tail.length).toFixed(2),
+          width: '16px',
+          height: '16px',
+          borderRadius: '50%',
+          pointerEvents: 'none' // 讓尾巴不攔截滑鼠事件
+            
+            }"
+          ></div>
+          @* <div style="position: absolute; bottom: 5px; left: 5px;">X: {{ mouseX }}, Y: {{ mouseY }}</div> *@
+        <div style="position: fixed; bottom: 5px; left: 5px; color: black; background: white; padding: 2px 5px; border-radius: 3px; font-size: 12px;">
+        X: {{ mouseX }}, Y: {{ mouseY }}
+      </div>
+        </div>
+      `
+    });
+
+    app.mount('#app');
 </script>
 </html>

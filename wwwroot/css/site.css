@@ -12,7 +12,27 @@ html {
     width: 800px;
 
 }
+#app {
+      position: relative;
+      user-select: none;
+      overflow: hidden;
+      /* 取消邊框 */
+  border: none;
 
+  /* 取消背景色 */
+  background-color: transparent;
+  
+    }
+    .tail {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      pointer-events: none;
+      transition: top 0.1s, left 0.1s;
+      mix-blend-mode: multiply;
+      z-index: 1000; /* 確保在其他元素之上 */
+    }
 .wrap { /* 整個頁面的容器 */
   position: relative;
   width: 100%;/* 撐滿整個視窗 */

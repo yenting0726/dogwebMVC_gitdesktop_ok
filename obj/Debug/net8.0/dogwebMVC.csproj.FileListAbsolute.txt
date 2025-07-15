@@ -564,3 +564,4 @@ c:\Users\User\Desktop\javascript4_21\dogwebMVC\NEWdog\obj\Debug\net8.0\refint\do
 c:\Users\User\Desktop\javascript4_21\dogwebMVC\NEWdog\obj\Debug\net8.0\dogwebMVC.pdb
 C:\Users\User\Desktop\javascript4_21\dogwebMVC\NEWdog\obj\Debug\net8.0\dogwebMVC.genruntimeconfig.cache
 C:\Users\User\Desktop\javascript4_21\dogwebMVC\NEWdog\obj\Debug\net8.0\ref\dogwebMVC.dll
+c:\Users\User\Desktop\javascript4_21\dogwebMVC\NEWdog\obj\Debug\net8.0\dogwebMVC.sourcelink.json
