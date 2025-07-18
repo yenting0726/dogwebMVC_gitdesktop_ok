@@ -37,6 +37,7 @@ builder.Services.AddRazorPages();             // <-- Razor Pages
 // 加入資料庫 先註解 因為要發布
 //  builder.Services.AddDbContext<AppDbContext>(options =>
 //      options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // 資料庫設定 - 本地 SQL Server 版本
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

@@ -30,20 +30,14 @@ namespace dogwebMVC.Controllers
                 // 從 POST 表單中取得使用者名稱與密碼欄位
                 string username = Request.Form["username"].FirstOrDefault() ?? string.Empty;
                 string password = Request.Form["password"].FirstOrDefault() ?? string.Empty;
-                string confirmPassword = Request.Form["confirmPassword"].FirstOrDefault() ?? string.Empty;
+                string email = Request.Form["email"].FirstOrDefault() ?? string.Empty;
 
                 // 檢查是否為空值
-                if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
+                if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(email))
                 {
-                    return BadRequest("請輸入帳號、密碼與確認密碼");
+                    return BadRequest("請輸入帳號、密碼與電子郵件");
                 }
-
-                // 檢查密碼與確認密碼是否一致
-                if (password != confirmPassword)
-                {
-                    return BadRequest("密碼與確認密碼不一致");
-                }
-
+                
                 // 檢查資料庫是否已有該帳號
                 if (_context.Members.Any(m => m.Username == username))
                 {
@@ -54,7 +48,8 @@ namespace dogwebMVC.Controllers
                 var newMember = new Member
                 {
                     Username = username,
-                    Password = password // ⚠️ 實務上應改為加密儲存（雜湊）
+                    Password = password,
+                    Email = email
                 };
 
                 // 加入資料庫並儲存

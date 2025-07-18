@@ -43,6 +43,7 @@
     const formData = new FormData();
     formData.append("Username", $('#username').val());
     formData.append("Password", $('#password').val());
+    formData.append("email", $('#email').val());
 
    $.ajax({
     // 設定 HTTP 請求方法為 POST
@@ -59,7 +60,7 @@
     success: function (msg) {
         // 將回傳訊息顯示在 id 為 status 的元素中
         // 如果 msg 有 message 屬性則顯示該訊息，否則直接顯示 msg
-        $('#status').text(msg.message || msg);
+        $('#status').text(msg.message ||msg );
     },
     // 請求失敗時執行的函式，參數 xhr 是 XMLHttpRequest 物件
     error: function (xhr) {
@@ -85,7 +86,7 @@
         processData: false,
         contentType: false,
         success: function (msg) {
-            $('#status').text(msg);
+            $('#status').text(msg.message || "註冊成功");
         },
         error: function (xhr) {
             $('#status').text("註冊失敗：" + xhr.responseText);
@@ -108,7 +109,7 @@
         } 
         // check msg 中有 "已登入" 的話，則顯示登入狀態
         if (msg.includes("歡迎")) {
-            $('#status').text("您已登入");
+            $('#status').text(msg.message + "，帳號：" + msg.username);
         }
     });
 });
