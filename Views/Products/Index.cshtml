@@ -136,7 +136,19 @@
                     console.error('載入商品資料時發生錯誤：', error);
                 }
             }
-            
+            // 呼叫後端 API 檢查登入及管理者身份
+    fetch('/api/AuthApi/check')
+        .then(res => res.json())
+        .then(data => {
+            // 如果有登入且是管理者，顯示新增按鈕
+            this.showDiv = data.loggedIn && data.isAdmin;
+        })
+        .catch(err => {
+            console.error('檢查登入狀態時發生錯誤：', err);
+            this.showDiv = false;
+        });
+
+
             // 更新購物車數量
             this.updateCartCount();
         },

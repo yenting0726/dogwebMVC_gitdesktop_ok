@@ -36,6 +36,10 @@ public IActionResult product()
         return View();
     }
 
+    public IActionResult memberinfo()
+    {
+        return View();
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

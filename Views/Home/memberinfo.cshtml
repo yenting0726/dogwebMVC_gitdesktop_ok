@@ -1,0 +1,29 @@
+    <h2>會員資訊</h2>
+    <div id="memberInfo">
+        <p><strong>使用者名稱:</strong> <span id="username"></span></p>
+        <p><strong>電子郵件:</strong> <span id="email"></span></p>
+        <p><strong>會員等級:</strong> <span id="membershipLevel"></span></p>
+    </div>
+    <div id="FetchInfo" class="btn btn-info">會員資訊: </div>
+<script>
+    $(function () {
+        $("#FetchInfo").click(function () {
+            $.ajax({
+                url: "/api/AuthApi/getUser",
+                type: "GET",
+                success: function (data) {
+                    if (data.message) {
+                        alert(data.message);
+                    } else {
+                        $("#username").text(data.username);
+                        $("#email").text(data.email);
+                        $("#membershipLevel").text(data.isAdmin ? "管理員" : "一般會員");
+                    }
+                },
+                error: function () {
+                    alert("無法獲取會員資訊");
+                }
+            });
+        });
+    });
+</script>

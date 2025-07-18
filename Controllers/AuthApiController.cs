@@ -37,7 +37,7 @@ namespace dogwebMVC.Controllers
                 {
                     return BadRequest("請輸入帳號、密碼與電子郵件");
                 }
-                
+
                 // 檢查資料庫是否已有該帳號
                 if (_context.Members.Any(m => m.Username == username))
                 {
@@ -98,6 +98,7 @@ namespace dogwebMVC.Controllers
                 // 寫入 Session，紀錄使用者登入狀態
                 HttpContext.Session.SetString("user", username);
 
+
                 // 回傳成功訊息
                 return Ok(new { message = "登入成功", username });
             }
@@ -106,21 +107,52 @@ namespace dogwebMVC.Controllers
                 // 捕捉例外錯誤
                 return StatusCode(500, "伺服器錯誤: " + ex.Message);
             }
+
         }
 
         // GET: api/AuthApi/check - 檢查登入狀態
         [HttpGet("check")]
         public IActionResult CheckLogin()
         {
-            // 讀取 Session 中的使用者帳號
-            var user = HttpContext.Session.GetString("user");
+ var username = HttpContext.Session.GetString("user");
+    if (string.IsNullOrEmpty(username))
+    {
+        return Ok("未登入");
+    }
 
-            // 如果為空，代表尚未登入
-            if (string.IsNullOrEmpty(user))
-                return Ok("未登入");
+    var isAdmin = IsAdmin(username);
+    return Ok(new
+    {
+        loggedIn = true,
+        isAdmin = isAdmin,
+        username = username,
+        message = "歡迎"
+    });
+        }
 
-            // 回傳登入使用者名稱
-            return Ok($"歡迎, {user}");
+        // GET: api/AuthApi/getUser - 取得使用者資訊
+        [HttpGet("getUser")]
+        public IActionResult GetUser()
+        {
+            var username = HttpContext.Session.GetString("user");
+            if (string.IsNullOrEmpty(username))
+            {
+                return Ok(new { message = "未登入" });
+            }
+
+            var member = _context.Members.FirstOrDefault(m => m.Username == username);
+            if (member == null)
+            {
+                return NotFound("使用者不存在");
+            }
+
+            return Ok(new
+            {
+                member.Id,
+                member.Username,
+                member.Email,
+                isAdmin = IsAdmin(username)
+    });
         }
 
         // POST: api/AuthApi/logout - 處理登出
@@ -133,5 +165,13 @@ namespace dogwebMVC.Controllers
             // 回傳成功訊息
             return Ok("已登出");
         }
+private bool IsAdmin(string username)
+{
+    var admins = new List<string> { "yenting", "user", "root" };
+    return admins.Any(a => a.Equals(username, StringComparison.OrdinalIgnoreCase));
+}
+
+
     }
+    
 }
