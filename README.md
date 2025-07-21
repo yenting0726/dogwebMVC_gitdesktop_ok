@@ -11,16 +11,9 @@
 - 管理員帳號支援（預設帳號 yenting、user、root 具管理權限）。
 
 ## 安裝與執行方式
-1. **環境需求**：
-   - .NET 8.0 SDK
-   - SQL Server（或修改連線字串為其他資料庫）
-2. **安裝步驟**：
-   - 下載或 clone 此專案
-   - 還原 NuGet 套件：`dotnet restore`
-   - 執行資料庫遷移：`dotnet ef database update`
-   - 啟動專案：`dotnet run`
-   - 預設網址：http://localhost:5119
-
+    **資料庫**：
+   
+   - MSSQL
 ## 專案結構
 - `Controllers/`：MVC 控制器（產品、會員、首頁等）
 - `Models/`：資料模型（產品、會員、資料庫上下文）
